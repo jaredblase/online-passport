@@ -25,7 +25,7 @@ export default async function Home() {
 		<div className="container">
 			<p>Hi, {user.email}!</p>
 			<UserView userId={user.uid}>
-				<img src={data} />
+				<img src={data} alt="QR code displaying user for admins to scan" />
 			</UserView>
 			<Button onClick={logoutSession}>Logout</Button>
 		</div>

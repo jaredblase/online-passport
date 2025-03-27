@@ -4,7 +4,7 @@ import {
 	QrcodeErrorCallback,
 	QrcodeSuccessCallback,
 } from 'html5-qrcode'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useEffect, useId } from 'react'
 
 type QRScannerProps = {
@@ -17,10 +17,21 @@ type QRScannerProps = {
 export const QRScanner = React.memo(
 	({ config, verbose, onError, onSuccess }: QRScannerProps) => {
 		const id = useId()
+		const ref = useRef<Html5QrcodeScanner | null>(null)
 
 		useEffect(() => {
-			const scanner = new Html5QrcodeScanner(id, config, verbose)
-			scanner.render(onSuccess, onError)
+			if (!ref.current) {
+				ref.current = new Html5QrcodeScanner(id, config, verbose)
+			}
+
+			const scanner = ref.current
+
+			setTimeout(() => {
+				const container = document.getElementById(id)
+				if (scanner && container?.innerHTML == '') {
+					scanner.render(onSuccess, onError)
+				}
+			})
 
 			return () => {
 				scanner.clear().catch((error) => {
@@ -32,3 +43,5 @@ export const QRScanner = React.memo(
 		return <div id={id} />
 	}
 )
+
+QRScanner.displayName = 'QRScanner'
