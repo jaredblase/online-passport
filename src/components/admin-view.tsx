@@ -1,3 +1,5 @@
+'use client'
+
 import { FIRESTORE_CLIENT } from '@/lib/firebase/client'
 import { doc, increment, updateDoc } from 'firebase/firestore'
 import { useCallback, useEffect, useState } from 'react'

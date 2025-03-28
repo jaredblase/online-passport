@@ -1,28 +1,23 @@
-'use client'
+'use server'
 
-import { AdminView } from './admin-view'
-import { useUser } from '@/lib/user/use-user'
+import { generateQrCode } from '@/lib/models/user/user'
+import { Itinerary } from './itinerary'
+import { getItinerary } from '@/lib/models/itinerary'
 
 type DynamicDataProps = {
 	userId: string
-	children?: React.ReactNode
 }
 
-export function UserView({ userId, children }: DynamicDataProps) {
-	const user = useUser(userId)
-
-	if (!user) {
-		return <p>Loading...</p>
-	}
-
-	if (user.admin) {
-		return <AdminView />
-	}
+export async function UserView({ userId }: DynamicDataProps) {
+	const [qrData, itinerary] = await Promise.all([
+		generateQrCode(userId),
+		getItinerary(),
+	])
 
 	return (
 		<>
-			{children}
-			<p>Times scanned : {user.times_scanned}</p>
+			<img src={qrData} alt="QR code for admins to scan" />
+			<Itinerary userId={userId} itinerary={itinerary} />
 		</>
 	)
 }

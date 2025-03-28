@@ -3,9 +3,10 @@
 import { LoginForm } from '../components/login-form'
 import { getUserToken, logoutSession } from '@/lib/session'
 import { UserView } from '@/components/user-view'
-import qrcode from 'qrcode'
 import { Button } from '@/components/ui/button'
-import { getUserById } from '@/lib/user/user'
+import { getUserById } from '@/lib/models/user/user'
+import { AdminView } from '@/components/admin-view'
+import { getItinerary } from '@/lib/models/itinerary'
 
 export default async function Home() {
 	const userToken = await getUserToken()
@@ -22,22 +23,18 @@ export default async function Home() {
 		)
 	}
 
+	getItinerary()
 	const user = await getUserById(userToken.uid)
-	console.log(user)
 
 	// user does not exist
 	if (!user) {
 		return await logoutSession()
 	}
 
-	const data = await qrcode.toDataURL(userToken.uid)
-
 	return (
 		<div className="container">
 			<p>Hi, {userToken.email}!</p>
-			<UserView userId={userToken.uid}>
-				<img src={data} alt="QR code displaying user for admins to scan" />
-			</UserView>
+			{user.admin ? <AdminView /> : <UserView userId={userToken.uid} />}
 			<Button onClick={logoutSession}>Logout</Button>
 		</div>
 	)
