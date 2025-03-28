@@ -1,10 +1,11 @@
 'use server'
 
+import { Timestamp } from 'firebase/firestore'
 import { FIRESTORE_ADMIN } from '../../firebase/admin'
 import qrcode from 'qrcode'
 
 type Member = {
-	completed: boolean
+	completed: Record<string, Timestamp>
 	times_scanned: number
 	admin: false
 }
