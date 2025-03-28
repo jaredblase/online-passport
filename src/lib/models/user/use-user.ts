@@ -2,7 +2,7 @@
 
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { FIRESTORE_CLIENT } from '../firebase/client'
+import { FIRESTORE_CLIENT } from '../../firebase/client'
 import { User } from './user'
 
 export function useUser(userId: string) {
