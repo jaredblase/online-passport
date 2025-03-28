@@ -1,3 +1,5 @@
+'use client'
+
 import {
 	Html5QrcodeCameraScanConfig,
 	Html5QrcodeScanner,
