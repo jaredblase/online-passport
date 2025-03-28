@@ -33,7 +33,7 @@ export async function createSession(token: string) {
 	}
 }
 
-export async function getUser(): Promise<DecodedIdToken | null> {
+export async function getUserToken(): Promise<DecodedIdToken | null> {
 	const token = await getCookie(FIREBASE_COOKIE_NAME)
 	if (!token) return null
 	const data = await AUTH_ADMIN.verifySessionCookie(token)

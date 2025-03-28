@@ -1,13 +1,16 @@
+'use server'
+
 import { LoginForm } from '../components/login-form'
-import { getUser, logoutSession } from '@/lib/session'
+import { getUserToken, logoutSession } from '@/lib/session'
 import { UserView } from '@/components/user-view'
 import qrcode from 'qrcode'
 import { Button } from '@/components/ui/button'
+import { getUserById } from '@/lib/user/user'
 
 export default async function Home() {
-	const user = await getUser()
+	const userToken = await getUserToken()
 
-	if (!user) {
+	if (!userToken) {
 		return (
 			<div className="container">
 				<h1>Welcome to EConnect</h1>
@@ -19,12 +22,20 @@ export default async function Home() {
 		)
 	}
 
-	const data = await qrcode.toDataURL(user.uid)
+	const user = await getUserById(userToken.uid)
+	console.log(user)
+
+	// user does not exist
+	if (!user) {
+		return await logoutSession()
+	}
+
+	const data = await qrcode.toDataURL(userToken.uid)
 
 	return (
 		<div className="container">
-			<p>Hi, {user.email}!</p>
-			<UserView userId={user.uid}>
+			<p>Hi, {userToken.email}!</p>
+			<UserView userId={userToken.uid}>
 				<img src={data} alt="QR code displaying user for admins to scan" />
 			</UserView>
 			<Button onClick={logoutSession}>Logout</Button>
