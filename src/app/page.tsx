@@ -34,7 +34,11 @@ export default async function Home() {
 	return (
 		<div className="container">
 			<p>Hi, {userToken.email}!</p>
-			{user.admin ? <AdminView /> : <UserView userId={userToken.uid} />}
+			{user.admin ? (
+				<AdminView itinerary={await getItinerary()} />
+			) : (
+				<UserView userId={userToken.uid} />
+			)}
 			<Button onClick={logoutSession}>Logout</Button>
 		</div>
 	)

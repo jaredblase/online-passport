@@ -33,6 +33,10 @@ export async function createSession(token: string) {
 	}
 }
 
+/**
+ * Retrieve and deocde user information from cookies
+ * @returns Decoeded user token
+ */
 export async function getUserToken(): Promise<DecodedIdToken | null> {
 	const token = await getCookie(FIREBASE_COOKIE_NAME)
 	if (!token) return null
