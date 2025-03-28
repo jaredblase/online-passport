@@ -54,9 +54,7 @@ export function AdminView({ itinerary }: AdminViewProps) {
 		setUpdateStatus('Updating...')
 
 		await updateDoc(userRef, {
-			completed: {
-				[selectedItinerary]: serverTimestamp(),
-			},
+			[`completed.${selectedItinerary}`]: serverTimestamp(),
 		})
 
 		setUpdateStatus('Updated!')
@@ -68,10 +66,15 @@ export function AdminView({ itinerary }: AdminViewProps) {
 		}
 	}, [scannedId, selectedItinerary])
 
+	function onItinerarySelect(itinerary: string) {
+		setScannedId("")
+		setSelectedItinerary(itinerary)
+	}
+
 	return (
 		<div className="mt-8 mb-4">
 			<Label htmlFor={selectId}>Itinerary item to mark:</Label>
-			<Select onValueChange={setSelectedItinerary}>
+			<Select onValueChange={onItinerarySelect}>
 				<SelectTrigger id={selectId} className="w-[180px]">
 					<SelectValue placeholder="Choose..." />
 				</SelectTrigger>
